@@ -2,13 +2,17 @@
   <div id="app">
     <v-header></v-header>
     <div class="tab">
-      <div class="tab-item">商品</div>
-      <div class="tab-item">评论</div>
-      <div class="tab-item">商家</div>
+      <div class="tab-item">
+        <router-link :to="{path:'/goods'}">商品</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link :to="{path:'/ratings'}">评论</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link :to="{path:'/seller'}">商家</router-link>
+      </div>
     </div>
-    <div class="content">
-      I am Content
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -18,6 +22,9 @@ export default {
   name: 'app',
   components:{
     vHeader
+  },
+  mounted(){
+    this.$router.push({path:'/goods'})
   }
 }
 </script>
@@ -38,4 +45,9 @@ export default {
     .tab-item
       flex:1
       text-align :center
+      & > a
+        display:block
+        color:rgb(77,85,93)
+        &.router-link-active
+          color:rgb(240,20,20)
 </style>
