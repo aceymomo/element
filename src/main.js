@@ -8,6 +8,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Axios from 'axios'
 
+import './common/stylus/index.styl'
+
 Vue.use(Vuex)
 Vue.use(ElementUI)
 

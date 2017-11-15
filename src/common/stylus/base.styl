@@ -1,0 +1,14 @@
+body,html 
+    line-height: 1
+    font-weight: 200
+    font-family: 'PingFang SC','STHeitiSC-Light',Arial, Helvetica, sans-serif
+
+@media(min-device-pixel-ratio:1.5)
+    .border-1px
+        &::after
+            transform: scaleY(0.7)
+
+@media(min-device-pixel-ratio:2)
+    .border-1px
+        &::after
+            transform: scaleY(0.5)
