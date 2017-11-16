@@ -12,3 +12,13 @@ body,html
     .border-1px
         &::after
             transform: scaleY(0.5)
+
+.clearfix
+    display: inline-block
+    &:after
+        display: block
+        content:"."
+        height: 0
+        line-height: 0
+        clear: both
+        visibility: hidden
