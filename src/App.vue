@@ -34,7 +34,6 @@ export default {
     .then(res=>{
       if(res.data.errno === ERR_OK){
         this.seller = res.data.data
-        console.log(this.seller)
       }
     })
     .catch(err=>{
