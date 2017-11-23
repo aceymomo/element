@@ -36,7 +36,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart :select-food="selectFood" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
@@ -85,6 +85,17 @@ const ERR_OK = 0
           }
         }
         return 0
+      },
+      selectFood(){
+        let foods = []
+        this.goods.forEach((good)=>{
+          good.foods.forEach((food)=>{
+            if(food.count){
+              foods.push(food)
+            }
+          })
+        })
+        return foods
       }
     },
     methods:{

@@ -56,11 +56,11 @@ import Vue from 'vue'
     font-size:0
     .fade-enter
         opacity :0
-        transform :translate3d(24px,0,0)
+        transform :translate3d(24px,0,0) rotate(180deg)
     .fade-enter-active,.fade-leave-active
         transition :all 0.4s linear
     .fade-leave-to
-        transform :translate3d(24px,0,0)
+        transform :translate3d(24px,0,0) rotate(180deg)
         opacity:0
     .cart-decrease,.cart-add
         display :flex
