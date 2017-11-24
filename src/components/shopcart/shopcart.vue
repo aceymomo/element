@@ -15,10 +15,30 @@
               <div class="pay" :class="payClass">{{payDesc}}</div>
           </div>
       </div>
+      <div class="shopcart-list" v-show="listShow">
+          <div class="list-header">
+              <h1 class="title">购物车</h1>
+              <span class="empty">清空</span>
+          </div>
+          <div class="list-content">
+              <ul>
+                  <li class="list-box" v-for="food in selectFood">
+                      <span class="name">{{food.name}}</span>
+                      <div class="price">
+                          <span>￥{{food.count*food.price}}</span>
+                      </div>
+                      <div class="cartcontrol">
+                          <cartconcontrol :food="food"></cartconcontrol>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+      </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
   export default {
     props:{
         selectFood:{
@@ -43,7 +63,7 @@
     },
     data() {
       return {
-    
+          listShow:true
       }
 
     },
@@ -81,12 +101,13 @@
         }
     },
     components: {
-
+        cartconcontrol
     }
   }
 </script>
 
 <style scoped lang="stylus">
+@import '../../common/stylus/mixin'
 .shopcart
     position :fixed
     left:0
@@ -102,6 +123,7 @@
             flex:1
             display :flex
             height:58px
+            z-index:100
             .logo-wrapper
                 display:flex
                 align-items :center
@@ -173,4 +195,49 @@
                 &.enough
                     background :#00b43c
                     color:#fff
+    .shopcart-list
+        width:100%
+        position :absolute
+        left:0
+        bottom:48px
+        .list-header
+            display :flex
+            justify-content :space-between
+            height:40px
+            padding:0 18px
+            font-size:0
+            background :#f3f5f7
+            border-1px(rgba(7,17,27,0.1))
+            .title
+                font-size:14px
+                font-weight :200
+                color:rgb(7,17,27)
+                line-height :40px
+            .empty
+                font-size:12px
+                color:rgb(0,160,220)
+                line-height :40px
+        .list-content
+            height:241px
+            overflow :hidden
+            padding:0 18px
+            background :#fff
+            .list-box
+                height:48px
+                display :flex
+                border-1px(rgba(7,17,27,0.1))
+                .name
+                    display :inline-block
+                    font-size:14px
+                    color:rgb(7,17,27)
+                    line-height :24px
+                .peice
+                    font-size:28px
+                    font-weight :700
+                    color:rgb(240,20,20)
+                    line-height :24px
+                .cartcontrol
+                    position:absolute
+                    bottom:12px
+                    right:0
 </style>
