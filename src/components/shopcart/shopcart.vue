@@ -15,25 +15,27 @@
               <div class="pay" :class="payClass">{{payDesc}}</div>
           </div>
       </div>
-      <div class="shopcart-list" v-show="listShow">
-          <div class="list-header">
-              <h1 class="title">购物车</h1>
-              <span class="empty">清空</span>
-          </div>
-          <div class="list-content">
-              <ul>
-                  <li class="list-box" v-for="food in selectFood">
-                      <span class="name">{{food.name}}</span>
-                      <div class="price">
-                          <span>￥{{food.count*food.price}}</span>
-                      </div>
-                      <div class="cartcontrol">
-                          <cartconcontrol :food="food"></cartconcontrol>
-                      </div>
-                  </li>
-              </ul>
-          </div>
-      </div>
+      <transition name="slide">
+        <div class="shopcart-list" v-show="listShow">
+            <div class="list-header">
+                <h1 class="title">购物车</h1>
+                <span class="empty">清空</span>
+            </div>
+            <div class="list-content">
+                <ul>
+                    <li class="list-box" v-for="food in selectFood">
+                        <span class="name">{{food.name}}</span>
+                        <div class="price">
+                            <span><i>￥</i>{{food.count*food.price}}</span>
+                        </div>
+                        <div class="cartcontrol">
+                            <cartconcontrol :food="food"></cartconcontrol>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+      </transition>
   </div>
 </template>
 
@@ -63,7 +65,7 @@ import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
     },
     data() {
       return {
-          listShow:true
+          theShow:false
       }
 
     },
@@ -97,6 +99,13 @@ import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
                 return 'not-enough'
             }else{
                 return 'enough'
+            }
+        },
+        listShow(){
+            if(this.totalCount>0){
+                return this.theShow = true
+            }else{
+                return this.theShow = false
             }
         }
     },
@@ -195,6 +204,14 @@ import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
                 &.enough
                     background :#00b43c
                     color:#fff
+    .slide-enter
+        opacity :0
+        transform :translate3d(0,100%,0)
+    .slide-enter-active,.slide-leave-active
+        transition :all 0.2s
+    .slide-leave-to
+        transform :translate3d(0,100%,0)
+        opacity:0
     .shopcart-list
         width:100%
         position :absolute
@@ -225,19 +242,25 @@ import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
             .list-box
                 height:48px
                 display :flex
+                align-items :center
                 border-1px(rgba(7,17,27,0.1))
                 .name
                     display :inline-block
                     font-size:14px
                     color:rgb(7,17,27)
                     line-height :24px
-                .peice
-                    font-size:28px
-                    font-weight :700
-                    color:rgb(240,20,20)
+                    flex:1
+                .price
                     line-height :24px
+                    margin-right :12px
+                    span
+                        font-size:14px
+                        font-weight :700
+                        color:rgb(240,20,20)
+                        i
+                            font-size:10px
+                            font-weight :normal
+                            font-style :normal
                 .cartcontrol
-                    position:absolute
-                    bottom:12px
-                    right:0
+                    float:right
 </style>
