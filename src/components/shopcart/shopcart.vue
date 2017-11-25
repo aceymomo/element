@@ -1,6 +1,7 @@
 <template>
+<div>
   <div class="shopcart">
-      <div class="content">
+      <div class="content" @click="toggleList">
           <div class="content-left">
               <div class="logo-wrapper">
                   <div class="logo" :class="{'highlight':totalCount>0}">
@@ -12,16 +13,16 @@
               <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
           </div>
           <div class="content-right">
-              <div class="pay" :class="payClass">{{payDesc}}</div>
+              <div class="pay" :class="payClass" @click.stop="pay">{{payDesc}}</div>
           </div>
       </div>
       <transition name="slide">
         <div class="shopcart-list" v-show="listShow">
             <div class="list-header">
                 <h1 class="title">购物车</h1>
-                <span class="empty">清空</span>
+                <span class="empty" @click="empty">清空</span>
             </div>
-            <div class="list-content">
+            <div class="list-content" ref="listContent">
                 <ul>
                     <li class="list-box" v-for="food in selectFood">
                         <span class="name">{{food.name}}</span>
@@ -37,9 +38,12 @@
         </div>
       </transition>
   </div>
+  <div class="list-mask" v-show="listShow" @click="hideList"></div>
+</div>
 </template>
 
 <script type="text/ecmascript-6">
+import BScroll from 'better-scroll'
 import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
   export default {
     props:{
@@ -65,7 +69,7 @@ import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
     },
     data() {
       return {
-          theShow:false
+          theShow:true
       }
 
     },
@@ -102,11 +106,45 @@ import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
             }
         },
         listShow(){
-            if(this.totalCount>0){
-                return this.theShow = true
-            }else{
-                return this.theShow = false
+            if(!this.totalCount){
+                this.theShow = true
+                return false
             }
+            let show = !this.theShow
+            if(show){
+                this.$nextTick(()=>{
+                    if(!this.scroll){
+                        this.scroll = new BScroll(this.$refs.listContent,{
+                            click:true
+                        })
+                    }else{
+                        this.scroll.refresh()
+                    }
+                })
+            }
+            return show
+        }
+    },
+    methods:{
+        empty(){
+            this.selectFood.forEach((food)=>{
+                food.count = 0
+            })
+        },
+        toggleList(){
+            if(!this.totalCount){
+                return
+            }
+            this.theShow = !this.theShow
+        },
+        hideList(){
+            this.theShow = true
+        },
+        pay(){
+            if(this.totalPrice<this.minPrice){
+                return
+            }
+            window.alert(`需要支付${this.totalPrice}元`)
         }
     },
     components: {
@@ -235,7 +273,7 @@ import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
                 color:rgb(0,160,220)
                 line-height :40px
         .list-content
-            height:241px
+            max-height:200px
             overflow :hidden
             padding:0 18px
             background :#fff
@@ -263,4 +301,13 @@ import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
                             font-style :normal
                 .cartcontrol
                     float:right
+.list-mask
+    position :fixed
+    top:0
+    left:0
+    width:100%
+    height:100%
+    z-index :40
+    background :rgba(7,17,27,0.6)
+    backdrop-filter: blur(10px)
 </style>
