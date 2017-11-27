@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="shopcart">
-      <div class="content" @click="toggleList">
+      <div class="content" @click.stop="toggleList">
           <div class="content-left">
               <div class="logo-wrapper">
                   <div class="logo" :class="{'highlight':totalCount>0}">
@@ -20,7 +20,7 @@
         <div class="shopcart-list" v-show="listShow">
             <div class="list-header">
                 <h1 class="title">购物车</h1>
-                <span class="empty" @click="empty">清空</span>
+                <span class="empty" @click.stop="empty">清空</span>
             </div>
             <div class="list-content" ref="listContent">
                 <ul>
@@ -38,7 +38,7 @@
         </div>
       </transition>
   </div>
-  <div class="list-mask" v-show="listShow" @click="hideList"></div>
+  <div class="list-mask" v-show="listShow" @click.stop="hideList"></div>
 </div>
 </template>
 

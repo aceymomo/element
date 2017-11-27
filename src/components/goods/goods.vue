@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul>
@@ -14,7 +15,7 @@
         <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item">
+            <li @click="selectFoodTo(food,$event)" v-for="food in item.foods" class="food-item">
               <div class="icon">
                 <img width="57" height="57" :src="food.icon">
               </div>
@@ -38,12 +39,15 @@
     </div>
     <shopcart :select-food="selectFood" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
+  <food :food="selectedFood" ref="food"></food>
+</div>
 </template>
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll'
 import shopcart from '@/components/shopcart/shopcart'
 import cartconcontrol from '@/components/cartconcontrol/cartconcontrol'
+import food from '@/components/food/food'
 const ERR_OK = 0
   export default {
     props:{
@@ -55,7 +59,8 @@ const ERR_OK = 0
       return {
         goods:[],
         listHeight:[],
-        scrollY:0
+        scrollY:0,
+        selectedFood:{}
       }
 
     },
@@ -130,11 +135,19 @@ const ERR_OK = 0
           height += item.clientHeight
           this.listHeight.push(height)
         }
+      },
+      selectFoodTo(food,event){
+        if(!event._constructed){
+          return
+        }
+        this.selectedFood = food
+        this.$refs.food.show()
       }
     },
     components: {
       shopcart,
-      cartconcontrol
+      cartconcontrol,
+      food
     }
   }
 </script>
