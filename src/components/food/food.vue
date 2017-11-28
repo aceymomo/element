@@ -23,12 +23,16 @@
                   </div>
                   <div class="buy" v-show="!food.count || food.count === 0" @click.stop="buyClick($event)">加入购物车</div>
               </div>
-              <split v-show="food.info">
-                  <div class="info" v-show="food.info">
-                      <h1 class="title">商品信息</h1>
-                      <p class="text">{{food.info}}</p>
-                  </div>
-              </split>
+              <split v-show="food.info"></split>
+              <div class="info" v-show="food.info">
+                  <h1 class="title">商品信息</h1>
+                  <p class="text">{{food.info}}</p>
+              </div>
+              <split></split>
+              <div class="ratingBox">
+                  <h1 class="title">商品评价</h1>
+                  <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"></ratingselect>
+              </div>
           </div>
       </div>
   </transition>
@@ -40,6 +44,12 @@ import BScroll from 'better-scroll'
 import Vue from 'vue'
 import cartcontrol from '@/components/cartconcontrol/cartconcontrol'
 import split from '@/components/split/split'
+import ratingselect from '@/components/ratingselect/ratingselect'
+
+const POSITIVE = 0
+const NEGATIVE = 1
+const ALL = 2
+
   export default {
     props:{
         food:{
@@ -48,7 +58,14 @@ import split from '@/components/split/split'
     },
     data() {
       return {
-          foodList:false
+          foodList:false,
+          selectType:ALL,
+          onlyContent:true,
+          desc:{
+              all:'全部',
+              positive:'推荐',
+              negative:'吐槽'
+          }
       }
 
     },
@@ -77,7 +94,8 @@ import split from '@/components/split/split'
     },
     components: {
         cartcontrol,
-        split
+        split,
+        ratingselect
     }
   }
 </script>
@@ -99,6 +117,7 @@ import split from '@/components/split/split'
     width:100%
     background :#f3f5f7
     .food-content
+        background :#fff
         .image-header
             position :relative
             width:100%
@@ -181,6 +200,7 @@ import split from '@/components/split/split'
                 padding:0 12px
         .info
             padding:18px
+            background :#fff
             .title
                 line-height :14px
                 margin-bottom:6px
@@ -192,4 +212,12 @@ import split from '@/components/split/split'
                 color:rgb(77,85,93)
                 line-height :24px
                 padding-left:8px
+        .ratingBox
+            background :#fff
+            padding:18px 0
+            .title
+                line-height :14px
+                font-size:14px
+                color:rgb(7,17,27)
+                margin-left:18px
 </style>
