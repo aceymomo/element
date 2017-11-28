@@ -31,7 +31,7 @@
               <split></split>
               <div class="ratingBox">
                   <h1 class="title">商品评价</h1>
-                  <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"></ratingselect>
+                  <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings" @ratingtype="ratingtypes" @toggletype="toggletypes"></ratingselect>
               </div>
           </div>
       </div>
@@ -90,6 +90,12 @@ const ALL = 2
                 return
             }
             Vue.set(this.food,'count',1)
+        },
+        ratingtypes(val){
+            this.selectType = val
+        },
+        toggletypes(){
+            this.onlyContent = !this.onlyContent
         }
     },
     components: {

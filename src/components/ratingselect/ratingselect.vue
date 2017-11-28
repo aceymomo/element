@@ -1,11 +1,11 @@
 <template>
   <div class="ratingselect">
       <div class="rating-type">
-          <span class="block positive" :class="{'active':selectType === 2}">{{desc.all}}<i>57</i></span>
-          <span class="block positive" :class="{'active':selectType === 0}">{{desc.positive}}<i>47</i></span>
-          <span class="block negative" :class="{'active':selectType === 1}">{{desc.negative}}<i>37</i></span>
+          <span @click="select(2,$event)" class="block positive" :class="{'active':selectType === 2}">{{desc.all}}<i>{{ratings.length}}</i></span>
+          <span  @click="select(0,$event)" class="block positive" :class="{'active':selectType === 0}">{{desc.positive}}<i>{{positives.length}}</i></span>
+          <span  @click="select(1,$event)" class="block negative" :class="{'active':selectType === 1}">{{desc.negative}}<i>{{negatives.length}}</i></span>
       </div>
-      <div class="switch" :class="{'on':onlyContent}">
+      <div @click="toggleContent($event)" class="switch" :class="{'on':onlyContent}">
           <span class="icon-check_circle"></span>
           <span class="text">只看有内容的评价</span>
       </div>
@@ -16,6 +16,26 @@ const POSITIVE = 0
 const NEGATIVE = 1
 const ALL = 2
 export default{
+    data(){
+        return{
+            selectTypes:this.selectType,
+            onlyContents:this.onlyContent
+        }
+    },
+    watch:{
+        selectType(val){
+            this.selectTypes = val
+        },
+        selectTypes(val){
+            this.$emit('ratingtype',val)
+        },
+        onlyContent(val){
+            this.onlyContents = val
+        },
+        onlyContents(){
+            this.$emit('toggletype',this.onlyContent)
+        }
+    },
     props:{
         ratings:{
             type:Array,
@@ -40,6 +60,32 @@ export default{
                     negative:'不满意'
                 }
             }
+        }
+    },
+    computed:{
+        positives(){
+            return this.ratings.filter((rating)=>{
+                return rating.rateType === POSITIVE
+            })
+        },
+        negatives(){
+            return this.ratings.filter((rating)=>{
+                return rating.rateType === NEGATIVE
+            })
+        }
+    },
+    methods:{
+        select(val,event){
+            if(!event._constructed){
+                return
+            }
+            this.selectTypes = val
+        },
+        toggleContent(event){
+            if(!event._constructed){
+                return
+            }
+            this.onlyContents = !this.onlyContents
         }
     }
 }
