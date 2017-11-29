@@ -32,6 +32,21 @@
               <div class="ratingBox">
                   <h1 class="title">商品评价</h1>
                   <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings" @ratingtype="ratingtypes" @toggletype="toggletypes"></ratingselect>
+                  <div class="rating-wrapper">
+                      <ul v-show="food.ratings && food.ratings.length">
+                          <li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings" class="rating-item">
+                              <div class="user">
+                                  <div class="time">{{rating.rateTime | formatData}}</div>
+                                  <span class="name">{{rating.username}}</span>
+                                  <img class="avatar" width="12" height="12" :src="rating.avatar">
+                              </div>
+                              <p class="text">
+                                  <span :class="{'icon-thumb_up':rating.rateType === 0,'icon-thumb_down':rating.rateType === 1}"></span>{{rating.text}}
+                              </p>
+                          </li>
+                      </ul>
+                      <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+                  </div>
               </div>
           </div>
       </div>
@@ -45,6 +60,7 @@ import Vue from 'vue'
 import cartcontrol from '@/components/cartconcontrol/cartconcontrol'
 import split from '@/components/split/split'
 import ratingselect from '@/components/ratingselect/ratingselect'
+import {formatData} from '@/common/js/date'
 
 const POSITIVE = 0
 const NEGATIVE = 1
@@ -93,9 +109,31 @@ const ALL = 2
         },
         ratingtypes(val){
             this.selectType = val
+            this.$nextTick(()=>{
+                this.scroll.refresh()
+            })
         },
         toggletypes(){
             this.onlyContent = !this.onlyContent
+            this.$nextTick(()=>{
+                this.scroll.refresh()
+            })
+        },
+        needShow(type,text){
+            if(this.onlyContent && !text){
+                return false
+            }
+            if(this.selectType === ALL){
+                return true
+            }else{
+                return type === this.selectType
+            }
+        }
+    },
+    filters:{
+        formatData(time){
+            let data = new Date(time)
+            return formatData(data,'yyyy-MM-dd hh:mm')
         }
     },
     components: {
@@ -226,4 +264,46 @@ const ALL = 2
                 font-size:14px
                 color:rgb(7,17,27)
                 margin-left:18px
+            .rating-wrapper
+                .rating-item
+                    padding:16px 0
+                    margin: 0 18px
+                    border-bottom:1px solid rgba(7,17,27,0.1)
+                    font-size:0
+                    .user
+                        display :flex
+                        margin-bottom:6px
+                        .time
+                            flex:1
+                            font-size:10px
+                            color:rgb(147,153,159)
+                            line-height :12px
+                        .name
+                            margin-right:6px
+                            font-size:10px
+                            color:rgb(147,153,159)
+                            line-height :12px
+                        .avatar
+                            width:12px
+                            height:12px
+                            border-radius :50%
+                    .text
+                        font-size:12px
+                        color:rgb(7,17,27)
+                        line-height :16px
+                        .icon-thumb_up
+                            font-size:12px
+                            color:rgb(0,160,220)
+                            line-height :16px
+                            margin-right :4px
+                        .icon-thumb_down
+                            font-size:12px
+                            color:rgb(147,153,159)
+                            line-height :16px
+                            margin-right :4px
+                .no-rating
+                    padding:16px 0
+                    margin:0 18px
+                    font-size:12px
+                    color:rgb(147,153,159)
 </style>
