@@ -38,9 +38,19 @@
                 <h1 class="title">{{rating.username}}</h1>
                 <span class="time">{{rating.rateTime}}</span>
               </div>
-              <star :size="24" :score="rating.score"></star>
-              <span class="times">{{rating.deliveryTime}}分钟送达</span>
+              <div class="startime">
+                <star :size="24" :score="rating.score"></star>
+                <span class="times">{{rating.deliveryTime}}分钟送达</span>
+              </div>
               <p class="text">{{rating.text}}</p>
+              <div class="iconbox">
+                <i class="icon-thumb_up" v-show="rating.recommend"></i>
+                <ul>
+                  <li v-show="rating.recommend" v-for="recom in rating.recommend" class="recomBox">
+                    <span class="recomment">{{recom}}</span>
+                  </li>
+                </ul>
+              </div>
             </div>
            </li>
          </ul>
@@ -102,6 +112,7 @@ const ERR_OK = 0
 </script>
 
 <style scoped lang="stylus">
+@import '../../common/stylus/mixin'
 .ratings
   position :absolute
   top:174px
@@ -166,4 +177,63 @@ const ERR_OK = 0
           font-size:12px
           color:rgb(147,153,159)
           line-height :18px
+  .rating-wrapper
+    padding:0 18px
+    .rating-item
+      display :flex
+      padding:18px 0
+      border-1px(rgba(7,17,27,0.1))
+      .avatar
+        flex:0 0 28px
+        width:28px
+        margin-right:12px
+        img
+          border-radius :50%
+      .content
+        flex:1
+        font-size:0
+        .usertime
+          display :flex
+          margin-bottom:4px
+          .title
+            flex:1
+            font-size:10px
+            color:rgb(7,17,27)
+            line-height :12px
+          .time
+            font-size:10px
+            font-weight :200
+            color:rgb(147,153,159)
+            line-height :12px
+        .startime
+          display :flex
+          margin-bottom:6px
+          .times
+            margin-left :6px
+            font-size:10px
+            font-weight :200
+            color:rgb(147,153,159)
+            line-height :12px
+        .text
+          font-size:12px
+          color:rgb(7,17,27)
+          line-height :18px
+          margin-bottom :8px
+        .iconbox
+          display :flex
+          .icon-thumb_up
+            font-size:12px
+            color:rgb(0,160,220)
+            line-height :16px
+            margin-right :8px
+          .recomBox
+            float :left
+            margin-right:8px
+            .recomment
+              padding:6px
+              font-size:9px
+              color:rgb(147,153,159)
+              line-height :16px
+              border:1px solid rgba(7,17,27,0.1)
+              border-radius :2px
 </style>
