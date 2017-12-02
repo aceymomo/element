@@ -18,6 +18,7 @@
 
 <script>
 import vHeader from '@/components/header/header'
+import {urlParse} from '@/common/js/util'
 const ERR_OK = 0
 export default {
   name: 'app',
@@ -26,14 +27,19 @@ export default {
   },
   data(){
     return{
-      seller:{}
+      seller:{
+        id:(()=>{
+          let queryParam = urlParse()
+          return queryParam.id 
+        })()
+      }
     }
   },
   created(){
-    this.$http.get('/api/seller')
+    this.$http.get('/api/seller?id=' + this.seller.id)
     .then(res=>{
       if(res.data.errno === ERR_OK){
-        this.seller = res.data.data
+        this.seller = Object.assign({},this.seller , res.data.data)
       }
     })
     .catch(err=>{

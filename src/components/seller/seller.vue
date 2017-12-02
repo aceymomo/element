@@ -8,6 +8,10 @@
          <span class="text">({{seller.ratingCount}})</span>
          <span class="text">月售{{seller.sellCount}}单</span>
        </div>
+       <div class="favorite">
+         <span class="icon-favorite" :class="{'active':favorite}" @click="toggleFavorite"></span>
+         <span class="text">{{favoriteText}}</span>
+       </div>
      </div>
      <div class="overul">
        <ul class="blockbox">
@@ -70,6 +74,7 @@
 import BScroll from 'better-scroll'
 import star from '@/components/star/star'
 import split from '@/components/split/split'
+import {saveTolocal,loadFromLocal} from '@/common/js/store'
  export default {
    props:{
      seller:{
@@ -78,9 +83,22 @@ import split from '@/components/split/split'
    },
    data() {
      return {
-       
+       favorite:(()=>{
+         return loadFromLocal(this.seller.id,'favorite',false)
+       })()
      }
 
+   },
+   computed:{
+     favoriteText(){
+      return this.favorite ? '已收藏' : '收藏'
+     }
+   },
+   methods:{
+     toggleFavorite(){
+       this.favorite = !this.favorite
+       saveTolocal(this.seller.id,'favorete',this.favorite)
+     }
    },
    created(){
     this.classMap = ['decrease','discount','guarantee','invoice','special']
@@ -132,6 +150,7 @@ import split from '@/components/split/split'
   .seller-content
     margin:18px 0
     .overview
+      position :relative
       margin:0 18px
       padding-bottom:18px
       border-1px(rgba(7,17,27,0.1))
@@ -151,6 +170,23 @@ import split from '@/components/split/split'
           color:rgb(77,85,93)
           line-height :18px
           margin-right :12px
+      .favorite
+        position :absolute
+        right:18px
+        top:0px
+        text-align :center
+        .icon-favorite
+          font-size:24px
+          line-height :24px
+          color:#d4d6d9
+          &.active
+            color:rgb(240,20,20)
+        .text
+          display :block
+          margin-top :4px
+          font-size:10px
+          color:rgb(77,85,93)
+          line-height :10px
     .overul
       padding:18px 0
       .blockbox
