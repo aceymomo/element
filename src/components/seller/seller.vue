@@ -83,9 +83,9 @@ import {saveTolocal,loadFromLocal} from '@/common/js/store'
    },
    data() {
      return {
-       favorite:(()=>{
-         return loadFromLocal(this.seller.id,'favorite',false)
-       })()
+       favorite: (() => {
+          return loadFromLocal(this.seller.id, 'favorite', false);
+        })()
      }
 
    },
@@ -97,7 +97,7 @@ import {saveTolocal,loadFromLocal} from '@/common/js/store'
    methods:{
      toggleFavorite(){
        this.favorite = !this.favorite
-       saveTolocal(this.seller.id,'favorete',this.favorite)
+       saveTolocal(this.seller.id,'favorite',this.favorite)
      }
    },
    created(){
