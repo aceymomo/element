@@ -45,13 +45,23 @@
      <split></split>
      <div class="real">
        <h1 class="title">商家实景</h1>
-       <ul class="realbox">
-         <li v-for="item in seller.pics" class="real-wrapper">
-           <img width="120" height="90" :src="item" class="realimg">
+       <div class="pic-wrapper" ref="realWrapper">
+        <ul class="realbox" ref="realList">
+          <li v-for="item in seller.pics" class="real-wrapper">
+            <img width="120" height="90" :src="item" class="realimg">
+          </li>
+        </ul>
+       </div>
+     </div>
+     <split></split>
+     <div class="describe">
+       <h1 class="title">商家信息</h1>
+       <ul>
+         <li v-for="item in seller.infos" class="desc-item">
+           <div class="content">{{item}}</div>
          </li>
        </ul>
      </div>
-     <split></split>
    </div>
  </div>
 </template>
@@ -74,6 +84,8 @@ import split from '@/components/split/split'
    },
    created(){
     this.classMap = ['decrease','discount','guarantee','invoice','special']
+   },
+   mounted(){
     this.$nextTick(()=>{
       if(!this.scroll){
           this.scroll = new BScroll(this.$refs.seller,{
@@ -83,6 +95,23 @@ import split from '@/components/split/split'
           this.scroll.refresh()
       }
     })
+
+    if(this.seller.pics){
+      let picWidth = 120
+      let margin = 6
+      let width = (picWidth + margin) * this.seller.pics.length
+      this.$refs.realList.style.width = width + 'px'
+      this.$nextTick(()=>{
+        if(!this.picScroll){
+          this.picScroll = new BScroll(this.$refs.realWrapper,{
+            scrollX:true,
+            eventPassthrough:'vertical'
+          })
+        }else{
+          this.picScroll.refresh()
+        }
+      })
+    }
    },
    components: {
      star,
@@ -200,12 +229,31 @@ import split from '@/components/split/split'
         font-size:14px
         color:rgb(7,17,27)
         line-height :14px
-      .realbox
-        display :flex
+      .pic-wrapper
+        width:100%
         overflow :hidden
-        .real-wrapper
-          margin-right:6px
-          .realimg
-            width:120px
-            height:90px
+        white-space :nowrap
+        .realbox
+          display :flex
+          .real-wrapper
+            margin-right:6px
+            .realimg
+              width:120px
+              height:90px
+    .describe
+      padding:18px
+      .title
+        padding-bottom :12px
+        font-size:14px
+        color:rgb(7,17,27)
+        line-height :14px
+        border-1px(rgba(7,17,27,0.1))
+      .desc-item
+        padding:16px 12px
+        border-1px(rgba(7,17,27,0.1))
+        .content
+          font-size:12px
+          color:rgb(7,17,27)
+          font-weight :200
+          line-height :16px
 </style>
