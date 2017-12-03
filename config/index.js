@@ -13,7 +13,7 @@ module.exports = {
         proxyTable: {},
 
         // Various Dev Server settings
-        host: '192.168.0.102', // can be overwritten by process.env.HOST
+        host: '192.168.1.103', // can be overwritten by process.env.HOST
         port: 8080, // can be overwritten by process.env.HOST, if port is in use, a free one will be determined
         autoOpenBrowser: false,
         errorOverlay: true,
@@ -71,6 +71,7 @@ module.exports = {
         // npm install --save-dev compression-webpack-plugin
         productionGzip: false,
         productionGzipExtensions: ['js', 'css'],
+        port: 9000,
 
         // Run the build command with an extra argument to
         // View the bundle analyzer report after build finishes:
